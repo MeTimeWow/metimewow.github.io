@@ -4,15 +4,15 @@
   <title>Reddit OAuth Callback</title>
   <script>
     window.onload = function() {
+      // Get URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       const state = urlParams.get('state');
       
       document.getElementById('status').textContent = 'Processing authentication...';
       
-      // Get the extension ID from a URL parameter or hardcode it (replace with your actual extension ID)
-      // You need to find your extension ID in chrome://extensions (with Developer mode enabled)
-      const extensionId = 'kfmanbdcfhjhipbeilnelnkhdogkjjfe'; // Replace with your actual extension ID
+      // IMPORTANT: Replace this with your actual extension ID from Step 2
+      const extensionId = "kfmanbdcfhjhipbeilnelnkhdogkjjfe"; // Get this from chrome://extensions
       
       try {
         chrome.runtime.sendMessage(extensionId, {
@@ -22,7 +22,10 @@
         }, function(response) {
           if (chrome.runtime.lastError) {
             document.getElementById('status').textContent = 'Error: ' + chrome.runtime.lastError.message;
-          } else if (response && response.status === 'success') {
+            return;
+          }
+          
+          if (response && response.status === 'success') {
             document.getElementById('status').textContent = 'Authentication successful! You can close this tab.';
             setTimeout(() => window.close(), 3000);
           } else {
@@ -31,6 +34,7 @@
         });
       } catch (e) {
         document.getElementById('status').textContent = 'Error: ' + e.message;
+        console.error('Failed to send message to extension:', e);
       }
     };
   </script>
