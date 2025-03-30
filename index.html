@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Redirecting...</title>
+  <title>Reddit OAuth Redirect</title>
   <script>
     window.onload = function() {
-      // Redirect to the extension's callback.html with the query parameters
-      window.location.href = 'chrome-extension://kfmanbdcfhjhipbeilnelnkhdogkjjfe/callback.html' + window.location.search;
+      // If this page receives OAuth parameters, redirect to callback.html
+      if (window.location.search.includes('code=')) {
+        window.location.href = 'callback.html' + window.location.search;
+      }
     };
   </script>
 </head>
