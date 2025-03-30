@@ -10,8 +10,9 @@
       
       document.getElementById('status').textContent = 'Processing authentication...';
       
-      // Replace with your actual extension ID you copied in step 1
-      const extensionId = 'kfmanbdcfhjhipbeilnelnkhdogkjjfe';
+      // Get the extension ID from a URL parameter or hardcode it (replace with your actual extension ID)
+      // You need to find your extension ID in chrome://extensions (with Developer mode enabled)
+      const extensionId = 'YOUR_EXTENSION_ID_HERE'; // Replace with your actual extension ID
       
       try {
         chrome.runtime.sendMessage(extensionId, {
@@ -21,15 +22,15 @@
         }, function(response) {
           if (chrome.runtime.lastError) {
             document.getElementById('status').textContent = 'Error: ' + chrome.runtime.lastError.message;
-            return;
+          } else if (response && response.status === 'success') {
+            document.getElementById('status').textContent = 'Authentication successful! You can close this tab.';
+            setTimeout(() => window.close(), 3000);
+          } else {
+            document.getElementById('status').textContent = 'Authentication failed: ' + (response?.message || 'Unknown error');
           }
-          
-          document.getElementById('status').textContent = 'Authentication successful! You can close this tab.';
-          setTimeout(() => window.close(), 3000);
         });
       } catch (e) {
         document.getElementById('status').textContent = 'Error: ' + e.message;
-        console.error('Failed to send message to extension:', e);
       }
     };
   </script>
