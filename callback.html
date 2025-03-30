@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            const state = params.get('state');
+            chrome.runtime.sendMessage('kfmanbdcfhjhipbeilnelnkhdogkjjfe', {
+                action: 'handle_callback',
+                code: code,
+                state: state
+            }, function(response) {
+                console.log('Callback response:', response);
+                if (response && response.status === 'success') {
+                    alert('Login successful!');
+                } else {
+                    alert('Login failed.');
+                }
+                window.close();
+            });
+        };
+    </script>
+</head>
+<body>
+    <p>Logging in...</p>
+</body>
+</html>
