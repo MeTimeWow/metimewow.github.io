@@ -6,7 +6,8 @@
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
             const state = params.get('state');
-            chrome.runtime.sendMessage('kfmanbdcfhjhipbeilnelnkhdogkjjfe', {
+            const extensionId = 'kfmanbdcfhjhipbeilnelnkhdogkjjfe';
+            chrome.runtime.sendMessage(extensionId, {
                 action: 'handle_callback',
                 code: code,
                 state: state
