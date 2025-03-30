@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script>
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get('code');
-            const state = params.get('state');
-            const extensionId = 'kfmanbdcfhjhipbeilnelnkhdogkjjfe';
-            chrome.runtime.sendMessage(extensionId, {
-                action: 'handle_callback',
-                code: code,
-                state: state
-            }, function(response) {
-                console.log('Callback response:', response);
-                if (response && response.status === 'success') {
-                    alert('Login successful!');
-                } else {
-                    alert('Login failed.');
-                }
-                window.close();
-            });
-        };
-    </script>
+  <title>Reddit OAuth Callback</title>
+  <script>
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      const state = urlParams.get('state');
+      
+      document.getElementById('status').textContent = 'Processing authentication...';
+      
+      if (!code) {
+        document.getElementById('status').textContent = 'Error: No authorization code received';
+        return;
+      }
+      
+      // Try to send the code to the extension
+      try {
+        chrome.runtime.sendMessage('Hf6pIT_SD44PrM9fgedBRQ', {
+          action: 'handle_callback',
+          code: code,
+          state: state
+        }, function(response) {
+          if (chrome.runtime.lastError) {
+            document.getElementById('status').textContent = 'Error connecting to extension: ' + chrome.runtime.lastError.message;
+            return;
+          }
+          
+          document.getElementById('status').textContent = 'Authentication successful! You can close this tab.';
+          setTimeout(() => window.close(), 3000);
+        });
+      } catch (e) {
+        document.getElementById('status').textContent = 'Error: ' + e.message;
+        console.error('Failed to send message to extension:', e);
+      }
+    };
+  </script>
 </head>
 <body>
-    <p>Logging in...</p>
+  <p id="status">Logging in...</p>
 </body>
 </html>
