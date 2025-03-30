@@ -10,20 +10,17 @@
       
       document.getElementById('status').textContent = 'Processing authentication...';
       
-      if (!code) {
-        document.getElementById('status').textContent = 'Error: No authorization code received';
-        return;
-      }
+      // Replace with your actual extension ID you copied in step 1
+      const extensionId = 'kfmanbdcfhjhipbeilnelnkhdogkjjfe';
       
-      // Try to send the code to the extension
       try {
-        chrome.runtime.sendMessage('Hf6pIT_SD44PrM9fgedBRQ', {
+        chrome.runtime.sendMessage(extensionId, {
           action: 'handle_callback',
           code: code,
           state: state
         }, function(response) {
           if (chrome.runtime.lastError) {
-            document.getElementById('status').textContent = 'Error connecting to extension: ' + chrome.runtime.lastError.message;
+            document.getElementById('status').textContent = 'Error: ' + chrome.runtime.lastError.message;
             return;
           }
           
@@ -38,6 +35,6 @@
   </script>
 </head>
 <body>
-  <p id="status">Logging in...</p>
+  <p id="status">Processing authentication...</p>
 </body>
 </html>
